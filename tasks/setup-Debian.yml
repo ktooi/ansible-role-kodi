@@ -1,0 +1,121 @@
+---
+- name: install software-properties-common
+  apt:
+    name: software-properties-common
+  become: true
+  when: kodi_repository != ""
+
+- name: add repository key
+  apt_key:
+    data: "{{ lookup('file', 'apt-key_648ACFD622F3D138.gpg') }}"
+    state: present
+  become: true
+
+- name: add repository
+  apt_repository:
+    repo: "{{ kodi_repository }}"
+  become: true
+  when: kodi_repository != ""
+
+- name: install kodi
+  apt:
+    name: "{{ kodi_packages }}"
+    default_release: "{{ kodi_release if kodi_release != '' else omit }}"
+  become: true
+
+- name: install xserver packages
+  apt:
+    name: "{{ kodi_xserver_packages }}"
+  become: true
+
+- name: copy Xwrapper.config
+  copy:
+    src: Xwrapper.config
+    dest: /etc/X11/Xwrapper.config
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: add kodi user
+  user:
+    name: "{{ kodi_user }}"
+    name: "{{ kodi_group }}"
+    groups: "{{ kodi_groups | list | default(omit) }}"
+    home: "{{ kodi_home_dir }}"
+  become: true
+
+- name: copy unit file
+  template:
+    src: kodi.service.j2
+    dest: /usr/lib/systemd/system/kodi.service
+  register: __unit_file
+  become: true
+
+- name: ensure kodi userdata directory is exists
+  file:
+    path: "{{ kodi_userdata_dir }}"
+    state: directory
+  become: true
+  become_user: "{{ kodi_user }}"
+
+- name: config mediasources.xml
+  template:
+    src: mediasources.xml.j2
+    dest: "{{ kodi_userdata_dir }}/mediasources.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_mediasources is defined
+
+- name: config sources.xml
+  template:
+    src: sources.xml.j2
+    dest: "{{ kodi_userdata_dir }}/sources.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_sources is defined
+
+- name: config passwords.xml
+  template:
+    src: passwords.xml.j2
+    dest: "{{ kodi_userdata_dir }}/passwords.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_passwords is defined
+
+- name: ensure fonts directory
+  file:
+    path: "{{ kodi_fonts_dir }}"
+    state: directory
+  become: true
+  become_user: "{{ kodi_user }}"
+
+- name: copy font
+  copy:
+    src: "fonts/{{ kodi_replace_arial_font }}"
+    dest: "{{ kodi_fonts_dir }}/arial.ttf"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_replace_arial_font is defined
+
+- name: configure guisettings.xml
+  lineinfile:
+    path: "{{ kodi_userdata_dir }}/guisettings.xml"
+    regexp: '<setting id="{{ item.key }}"'
+    line: '    <setting id="{{ item.key }}"{{ " " ~ item.attrs if "attrs" in item else "" }}>{{ item.value }}</setting>'
+  loop: "{{ kodi_guisettings }}"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+
+- name: enable kodi
+  systemd:
+    name: kodi
+    state: started
+    enabled: true
+    daemon_reload: "{{ __unit_file.changed }}"
+  become: true

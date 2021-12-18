@@ -1,0 +1,11 @@
+<mediasources>
+{% for tag, ch_tag_dict_list in kodi_mediasources.items() %}
+    <{{ tag }}>
+{% for ch_tag_dict in ch_tag_dict_list %}
+{% for ch_tag, ch_tag_val in ch_tag_dict.items() %}
+        <{{ ch_tag }} id="{{ ch_tag_val.id }}">{{ ch_tag_val.value }}</{{ ch_tag }}>
+{% endfor %}
+{% endfor %}
+    </{{ tag }}>
+{% endfor %}
+</mediasources>

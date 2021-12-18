@@ -1,0 +1,6 @@
+---
+- include_tasks: "variables.yml"
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - "setup-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "setup-{{ ansible_os_family }}.yml"

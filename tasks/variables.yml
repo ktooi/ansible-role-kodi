@@ -1,0 +1,43 @@
+---
+- name: Include OS-specfic variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "vars/{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+        - "vars/{{ ansible_os_family }}.yml"
+      skip: true
+
+- name: Define kodi_repository
+  set_fact:
+    kodi_repository: "{{ __kodi_repository }}"
+  when: kodi_repository is not defined
+
+- name: Define kodi_packages
+  set_fact:
+    kodi_packages: "{{ __kodi_packages | list }}"
+  when: kodi_packages is not defined
+
+- name: Define kodi_release
+  set_fact:
+    kodi_release: "{{ __kodi_release }}"
+  when: kodi_release is not defined
+
+- name: Define kodi_xserver_packages
+  set_fact:
+    kodi_xserver_packages: "{{ __kodi_xserver_packages | list }}"
+  when: kodi_xserver_packages is not defined
+
+- name: Define kodi_groups
+  set_fact:
+    kodi_groups: "{{ __kodi_groups | list }}"
+  when: kodi_groups is not defined
+
+- name: Define kodi_xinit
+  set_fact:
+    kodi_xinit: "{{ __kodi_xinit }}"
+  when: kodi_xinit is not defined
+
+- name: Define kodi_dbus_launch
+  set_fact:
+    kodi_dbus_launch: "{{ __kodi_dbus_launch }}"
+  when: kodi_dbus_launch is not defined

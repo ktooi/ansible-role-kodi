@@ -1,0 +1,4 @@
+---
+__kodi_repository: ppa:team-xbmc/ppa
+__kodi_packages:
+  - kodi

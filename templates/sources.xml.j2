@@ -1,0 +1,38 @@
+<sources>
+    <programs>
+        <default pathversion="1"></default>
+    </programs>
+    <video>
+        <default pathversion="1"></default>
+{% if "video" in kodi_sources %}
+{% for source in kodi_sources.video %}
+        <source>
+            <name>{{ source.name }}</name>
+            <path pathversion="{{ source.path.pathversion }}">{{ source.path.value }}</path>
+            <allowsharing>{{ source.allowsharing }}</allowsharing>
+        </source>
+{% endfor %}
+{% endif %}
+    </video>
+    <music>
+        <default pathversion="1"></default>
+{% if "music" in kodi_sources %}
+{% for source in kodi_sources.music %}
+        <source>
+            <name>{{ source.name }}</name>
+            <path pathversion="{{ source.path.pathversion }}">{{ source.path.value }}</path>
+            <allowsharing>{{ source.allowsharing }}</allowsharing>
+        </source>
+{% endfor %}
+{% endif %}
+    </music>
+    <pictures>
+        <default pathversion="1"></default>
+    </pictures>
+    <files>
+        <default pathversion="1"></default>
+    </files>
+    <games>
+        <default pathversion="1"></default>
+    </games>
+</sources>

@@ -1,0 +1,6 @@
+---
+- name: restart kodi
+  systemd:
+    name: kodi
+    state: restarted
+  become: true

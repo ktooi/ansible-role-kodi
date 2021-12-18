@@ -1,0 +1,4 @@
+---
+kodi_skip_add_repository: true
+kodi_packages:
+  - kodi/oldstable

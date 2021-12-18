@@ -1,0 +1,17 @@
+[Unit]
+Description = Kodi Media Center (X11-standaone)
+After = network.target sound.target dbus.service polkit.service upower.service udisks.service
+Conflicts=getty@tty1.service
+
+[Service]
+User = {{ kodi_user }}
+Group = {{ kodi_group }}
+Type = simple
+TTYPath=/dev/tty1
+ExecStart = {{ kodi_xinit }} {{ kodi_dbus_launch }} --exit-with-session /usr/bin/kodi-standalone -- :0 -nolisten tcp vt1
+Restart = always
+RestartSec = 5
+
+[Install]
+WantedBy = multi-user.target
+

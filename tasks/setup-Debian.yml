@@ -52,6 +52,13 @@
   register: __unit_file
   become: true
 
+- name: copy autologin.conf
+  template:
+    src: autologin.conf.j2
+    dest: /etc/systemd/system/getty@tty1.service.d/autologin.conf
+  register: __autologin_conf_file
+  become: true
+
 - name: ensure kodi userdata directory is exists
   file:
     path: "{{ kodi_userdata_dir }}"
@@ -117,5 +124,5 @@
     name: kodi
     state: started
     enabled: true
-    daemon_reload: "{{ __unit_file.changed }}"
+    daemon_reload: "{{ __unit_file.changed or __autologin_conf_file.changed }}"
   become: true

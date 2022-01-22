@@ -37,6 +37,15 @@
     mode: 0644
   become: true
 
+- name: copy 50-disable-suspend-monitor.conf
+  copy:
+    src: 50-disable-suspend-monitor.conf
+    dest: /etc/X11/xorg.conf.d/50-disable-suspend-monitor.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
 - name: add kodi user
   user:
     name: "{{ kodi_user }}"

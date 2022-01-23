@@ -1,4 +1,9 @@
 ---
 __kodi_repository: ppa:team-xbmc/ppa
+__kodi_release: ''
 __kodi_packages:
   - kodi
+__kodi_xserver_packages:
+  - xserver-xorg-legacy
+__kodi_xinit: /usr/bin/xinit
+__kodi_dbus_launch: /usr/bin/dbus-launch

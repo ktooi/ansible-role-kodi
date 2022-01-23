@@ -8,6 +8,8 @@ kodi_userdata_dir: "{{ kodi_work_dir }}/userdata"
 kodi_media_dir: "{{ kodi_work_dir }}/media"
 kodi_fonts_dir: "{{ kodi_media_dir }}/fonts"
 
+kodi_apt_cache_valid_time: 86400
+
 # Replace arial.ttf with this font if this variable is defined.
 # This font must be stored in "role/kodi/files/fonts/" directory.
 #kodi_replace_arial_font: "mplus-1p-regular.ttf"

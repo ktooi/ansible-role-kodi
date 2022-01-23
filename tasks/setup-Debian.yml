@@ -2,6 +2,7 @@
 - name: install software-properties-common
   apt:
     name: software-properties-common
+    cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
   become: true
   when: kodi_repository != ""
 
@@ -21,6 +22,7 @@
   apt:
     name: "{{ kodi_packages }}"
     default_release: "{{ kodi_release if kodi_release != '' else omit }}"
+    cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
   become: true
 
 - name: install xserver packages

@@ -6,6 +6,14 @@
 #  become: true
 #  when: kodi_repository != ""
 
+- name: install gpg package
+  apt:
+    name:
+      - gpg
+    cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
+  become: true
+  when: kodi_repository != ""
+
 - name: add repository key
   apt_key:
     data: "{{ lookup('file', 'apt-key_648ACFD622F3D138.gpg') }}"

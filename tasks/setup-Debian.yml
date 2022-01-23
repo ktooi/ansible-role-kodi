@@ -1,10 +1,10 @@
 ---
-- name: install software-properties-common
-  apt:
-    name: software-properties-common
-    cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
-  become: true
-  when: kodi_repository != ""
+#- name: install software-properties-common
+#  apt:
+#    name: software-properties-common
+#    cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
+#  become: true
+#  when: kodi_repository != ""
 
 - name: add repository key
   apt_key:

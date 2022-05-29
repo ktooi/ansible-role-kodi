@@ -3,7 +3,7 @@ __kodi_groups:
   - audio
   - video
   - render
-__kodi_repository: "deb http://deb.debian.org/debian/ buster-backports main contrib"
+__kodi_repository: "deb http://deb.debian.org/debian/ {{ ansible_distribution_release }}-backports main contrib"
 __kodi_packages:
   - kodi
   - kodi-bin

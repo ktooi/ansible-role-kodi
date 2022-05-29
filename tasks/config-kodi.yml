@@ -1,0 +1,68 @@
+---
+- name: add kodi user
+  user:
+    name: "{{ kodi_user }}"
+    group: "{{ kodi_group }}"
+    groups: "{{ kodi_groups | list | default(omit) }}"
+    home: "{{ kodi_home_dir }}"
+  become: true
+
+- name: ensure kodi userdata directory is exists
+  file:
+    path: "{{ kodi_userdata_dir }}"
+    state: directory
+  become: true
+  become_user: "{{ kodi_user }}"
+
+- name: config mediasources.xml
+  template:
+    src: mediasources.xml.j2
+    dest: "{{ kodi_userdata_dir }}/mediasources.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_mediasources is defined
+
+- name: config sources.xml
+  template:
+    src: sources.xml.j2
+    dest: "{{ kodi_userdata_dir }}/sources.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_sources is defined
+
+- name: config passwords.xml
+  template:
+    src: passwords.xml.j2
+    dest: "{{ kodi_userdata_dir }}/passwords.xml"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_passwords is defined
+
+- name: ensure fonts directory
+  file:
+    path: "{{ kodi_fonts_dir }}"
+    state: directory
+  become: true
+  become_user: "{{ kodi_user }}"
+
+- name: copy font
+  copy:
+    src: "fonts/{{ kodi_replace_arial_font }}"
+    dest: "{{ kodi_fonts_dir }}/arial.ttf"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi
+  when: kodi_replace_arial_font is defined
+
+- name: configure guisettings.xml
+  lineinfile:
+    path: "{{ kodi_userdata_dir }}/guisettings.xml"
+    regexp: '<setting id="{{ item.key }}"'
+    line: '    <setting id="{{ item.key }}"{{ " " ~ item.attrs if "attrs" in item else "" }}>{{ item.value }}</setting>'
+  loop: "{{ kodi_guisettings }}"
+  become: true
+  become_user: "{{ kodi_user }}"
+  notify: restart kodi

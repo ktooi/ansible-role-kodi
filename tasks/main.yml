@@ -4,3 +4,6 @@
   with_first_found:
     - "setup-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
     - "setup-{{ ansible_os_family }}.yml"
+- include_tasks: config-x11.yml
+- include_tasks: config-kiosk.yml
+- include_tasks: config-kodi.yml

@@ -1,0 +1,14 @@
+---
+- name: copy unit file
+  template:
+    src: kodi.service.j2
+    dest: /usr/lib/systemd/system/kodi.service
+  notify: daemon-reload
+  become: true
+
+- name: copy autologin.conf
+  template:
+    src: autologin.conf.j2
+    dest: /etc/systemd/system/getty@tty1.service.d/autologin.conf
+  notify: daemon-reload
+  become: true

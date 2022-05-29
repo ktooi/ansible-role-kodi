@@ -1,0 +1,24 @@
+---
+- name: install xserver packages
+  apt:
+    name: "{{ kodi_xserver_packages }}"
+  become: true
+
+- name: copy Xwrapper.config
+  copy:
+    src: Xwrapper.config
+    dest: /etc/X11/Xwrapper.config
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: copy 50-disable-suspend-monitor.conf
+  copy:
+    src: 50-disable-suspend-monitor.conf
+    dest: /etc/X11/xorg.conf.d/50-disable-suspend-monitor.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+

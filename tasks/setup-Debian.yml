@@ -11,10 +11,11 @@
     update_cache: true
   become: true
 
-- name: install gpg package
+- name: install gpg packages
   apt:
     name:
       - gpg
+      - gpg-agent
     cache_valid_time: "{{ kodi_apt_cache_valid_time }}"
     update_cache: true
   become: true
